@@ -8,7 +8,8 @@ import {useHistory} from "react-router-dom";
 const validationScheme = Yup.object().shape({
     email: Yup.string()
         .email('Die E-Mail muss gültig sein')
-        .required('Das E-Mail Feld darf nicht leer sein')
+        .required('Das E-Mail Feld darf nicht leer sein'),
+    password: Yup.string()
 })
 
 const Login = () => {
@@ -42,7 +43,7 @@ const Login = () => {
                     email: 'Die eingegebene Email ist nicht valid'
                 });
                 break;
-            case 'user-not-found':
+            case 'auth/user-not-found':
                 setError({
                     ...error,
                     email: 'Dieses Konto existiert nicht'
@@ -67,7 +68,7 @@ const Login = () => {
                 <Row>
                     <FormGroup>
                         <FormLabel>E-Mail Adresse</FormLabel>
-                        <FormControl type={'email'} name={'email'} isInvalid={!!formik.errors.email}
+                        <FormControl type={'email'} name={'email'} isInvalid={!!formik.errors.email || !!error.email}
                                      placeholder={'Email Adresse'} onChange={formik.handleChange}/>
                         <Alert variant={'danger'} show={!!formik.errors.email || !!error.email}>{formik.errors.email || error.email}</Alert>
                     </FormGroup>
@@ -75,7 +76,7 @@ const Login = () => {
                 <Row>
                     <FormGroup>
                         <FormLabel>Passwort</FormLabel>
-                        <FormControl type={'password'} name={'password'} isInvalid={!!formik.errors.password}
+                        <FormControl type={'password'} name={'password'} isInvalid={!!formik.errors.password || !!error.password}
                                      placeholder={'Passwort'} onChange={formik.handleChange}/>
                         <Alert variant={'danger'} show={!!formik.errors.password || !!error.password}>{formik.errors.password || error.password}</Alert>
                     </FormGroup>

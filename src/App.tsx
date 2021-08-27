@@ -5,6 +5,7 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Switch from "react-bootstrap/Switch";
 import Login from "./login/Login";
 import firebase from "firebase/compat";
+import SignUp from "./login/SignUp";
 
 if(firebase.apps.length === 0) {
     firebase.initializeApp({
@@ -25,6 +26,7 @@ function App() {
                 <BrowserRouter>
                     <Switch>
                         <Route path={'/login'} component={Login}/>
+                        <Route path={'/signup'} component={SignUp}/>
                     </Switch>
                 </BrowserRouter>
         </Container>
