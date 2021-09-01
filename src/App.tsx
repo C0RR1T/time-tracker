@@ -1,13 +1,13 @@
-import React from 'react';
-import {Container} from "react-bootstrap";
+import React from "react";
+import { Container } from "react-bootstrap";
 import AppNavbar from "./AppNavbar";
-import {BrowserRouter, Route} from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import Switch from "react-bootstrap/Switch";
 import Login from "./login/Login";
 import firebase from "firebase/compat";
 import SignUp from "./login/SignUp";
 
-if(firebase.apps.length === 0) {
+if (firebase.apps.length === 0) {
     firebase.initializeApp({
         apiKey: "AIzaSyCvz1ymHe_2OFpKD2F8593e3ITKl7xN0y4",
         authDomain: "time-tracker-5411c.firebaseapp.com",
@@ -15,20 +15,20 @@ if(firebase.apps.length === 0) {
         storageBucket: "time-tracker-5411c.appspot.com",
         messagingSenderId: "730497288216",
         appId: "1:730497288216:web:806280737d0aff0163db6d",
-        measurementId: "G-EQ7X4W13CH"
-    })
+        measurementId: "G-EQ7X4W13CH",
+    });
 }
 
 function App() {
     return (
         <Container fluid>
-                <AppNavbar/>
-                <BrowserRouter>
-                    <Switch>
-                        <Route path={'/login'} component={Login}/>
-                        <Route path={'/signup'} component={SignUp}/>
-                    </Switch>
-                </BrowserRouter>
+            <AppNavbar />
+            <BrowserRouter>
+                <Switch>
+                    <Route path={"/signup"} component={SignUp} />
+                    <Route exact path={"/"} component={Login} />
+                </Switch>
+            </BrowserRouter>
         </Container>
     );
 }
