@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import AppNavbar from "./AppNavbar";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -6,6 +6,8 @@ import Switch from "react-bootstrap/Switch";
 import Login from "./login/Login";
 import firebase from "firebase/compat";
 import SignUp from "./login/SignUp";
+import TimeTracker from "./mainsite/TimeTracker";
+import ManageTasks from "./mainsite/ManageTasks";
 
 if (firebase.apps.length === 0) {
     firebase.initializeApp({
@@ -20,16 +22,31 @@ if (firebase.apps.length === 0) {
 }
 
 function App() {
+    const [currentUser, setCurrentUser] = useState<firebase.User | null>();
+
+    useEffect(() => {
+        firebase
+            .app()
+            .auth()
+            .onAuthStateChanged((user) => setCurrentUser(user));
+    });
     return (
-        <Container fluid>
-            <AppNavbar />
-            <BrowserRouter>
-                <Switch>
-                    <Route path={"/signup"} component={SignUp} />
-                    <Route exact path={"/"} component={Login} />
-                </Switch>
-            </BrowserRouter>
-        </Container>
+        <BrowserRouter>
+            <Container fluid>
+                <AppNavbar />
+                {!currentUser ? (
+                    <Switch>
+                        <Route path={"/signup"} component={SignUp} />
+                        <Route exact path={"/"} component={Login} />
+                    </Switch>
+                ) : (
+                    <Switch>
+                        <Route path={"/tasks"} component={ManageTasks} />
+                        <Route exact path={"/"} component={TimeTracker} />
+                    </Switch>
+                )}
+            </Container>
+        </BrowserRouter>
     );
 }
 

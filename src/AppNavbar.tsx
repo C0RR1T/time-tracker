@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, Nav, Navbar } from "react-bootstrap";
-import User from "./User";
 import firebase from "firebase/compat";
+import { useHistory, Link } from "react-router-dom";
 
 const AppNavbar = () => {
-    const [user, setUser] = useState<User | null>();
+    const [user, setUser] = useState<firebase.User | null>();
+    const history = useHistory();
 
     useEffect(() => {
-        firebase
-            .app()
-            .auth()
-            .onAuthStateChanged((user) => {
-                firebase
-                    .app()
-                    .firestore()
-                    .collection("users")
-                    .doc(user?.uid)
-                    .onSnapshot((snapshot) => {
-                        if (snapshot.data()) setUser(snapshot.data() as User);
-                    });
-            });
+        firebase.app().auth().onAuthStateChanged(setUser);
     }, []);
 
     return (
@@ -28,15 +17,22 @@ const AppNavbar = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse>
                 <Nav className={"me-auto"}>
-                    {user && (
+                    {user ? (
                         <>
-                            <Nav.Link>Zeit tracken</Nav.Link>
-                            <Nav.Link>Aktivitäten bearbeiten</Nav.Link>
+                            <Nav.Link>
+                                <Link to={"/"} style={{ textDecoration: "none" }} className={"nav-link"}>
+                                    Zeit tracken
+                                </Link>
+                            </Nav.Link>
+                            <Nav.Link>
+                                <Link to={"/tasks"} className={"nav-link"}>
+                                    Aktivitäten bearbeiten
+                                </Link>
+                            </Nav.Link>
                             <Nav.Link>Statistiken</Nav.Link>
                             <Nav.Link>Account</Nav.Link>
                         </>
-                    )}
-                    {!user && (
+                    ) : (
                         <>
                             <Nav.Link>Login</Nav.Link>
                         </>
@@ -45,7 +41,18 @@ const AppNavbar = () => {
                 <Nav>
                     {user && (
                         <Nav.Link>
-                            <Button variant={"outline-primary"}>Ausloggen</Button>
+                            <Button
+                                variant={"outline-primary"}
+                                onClick={() =>
+                                    firebase
+                                        .app()
+                                        .auth()
+                                        .signOut()
+                                        .then(() => history && history.push("/"))
+                                }
+                            >
+                                Ausloggen
+                            </Button>
                         </Nav.Link>
                     )}
                 </Nav>

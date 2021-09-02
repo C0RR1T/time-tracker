@@ -16,18 +16,20 @@ const validationSchema = Yup.object().shape({
 const SignUp = () => {
     const history = useHistory();
 
-    const handleSubmit = ({ email, password }: { email: string; password: string }) => {
-        firebase
-            .app()
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() =>
-                firebase
-                    .app()
-                    .auth()
-                    .signInWithEmailAndPassword(email, password)
-                    .then(() => history.push(""))
-            );
+    const handleSubmit = async ({ email, password }: { email: string; password: string }) => {
+        const { user } = await firebase.app().auth().createUserWithEmailAndPassword(email, password);
+        if (user) {
+            await firebase.firestore().collection("users").doc(user.uid).set({
+                activities: [],
+                tasks: [],
+                fastTasks: [],
+            });
+            firebase
+                .app()
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .then(() => history.push(""));
+        }
     };
 
     const formik = useFormik({
@@ -66,13 +68,23 @@ const SignUp = () => {
                     <Col>
                         <FormGroup>
                             <FormLabel>Passwort</FormLabel>
-                            <FormControl type={"password"} name={"password"} onChange={formik.handleChange} />
+                            <FormControl
+                                type={"password"}
+                                name={"password"}
+                                placeholder={"Passwort"}
+                                onChange={formik.handleChange}
+                            />
                         </FormGroup>
                     </Col>
                     <Col>
                         <FormGroup>
                             <FormLabel>Passwort bestätigen</FormLabel>
-                            <FormControl type={"password"} name={"confirmPassword"} onChange={formik.handleChange} />
+                            <FormControl
+                                type={"password"}
+                                name={"confirmPassword"}
+                                placeholder={"Passwort bestätigen"}
+                                onChange={formik.handleChange}
+                            />
                         </FormGroup>
                     </Col>
                 </Row>

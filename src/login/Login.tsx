@@ -1,9 +1,20 @@
 import React, { useState } from "react";
-import { Alert, Button, Container, Form, FormControl, FormGroup, FormLabel, ModalTitle, Row } from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    Container,
+    Form,
+    FormControl,
+    FormGroup,
+    FormLabel,
+    ModalFooter,
+    ModalTitle,
+    Row,
+} from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import firebase from "firebase/compat";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const validationScheme = Yup.object().shape({
     email: Yup.string().email("Die E-Mail muss gültig sein").required("Das E-Mail Feld darf nicht leer sein"),
@@ -102,6 +113,10 @@ const Login = () => {
                 <br />
                 <Button type={"submit"}>Einloggen</Button>
                 <br />
+                <br />
+                <ModalFooter>
+                    Noch kein Account? <Link to={"/signup"}>Hier registrieren</Link>
+                </ModalFooter>
             </Form>
         </Container>
     );
