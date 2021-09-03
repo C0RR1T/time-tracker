@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import AppNavbar from "./AppNavbar";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route } from "react-router-dom";
 import Switch from "react-bootstrap/Switch";
 import Login from "./login/Login";
 import firebase from "firebase/compat";
@@ -31,7 +31,7 @@ function App() {
             .onAuthStateChanged((user) => setCurrentUser(user));
     });
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Container fluid>
                 <AppNavbar />
                 {!currentUser ? (
@@ -46,7 +46,7 @@ function App() {
                     </Switch>
                 )}
             </Container>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 

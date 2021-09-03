@@ -6,6 +6,10 @@ import firebase from "firebase/compat";
 const TimeTracker = () => {
     const [time, setTime] = useState("00:00:00");
     const [user, setUser] = useState<User>();
+    const [currentTask, setCurrentTask] = useState<{
+        name?: string;
+        isPause: boolean;
+    }>();
 
     const [intervalState, setIntervalState] = useState<NodeJS.Timeout>();
 
@@ -19,29 +23,57 @@ const TimeTracker = () => {
     }, []);
 
     useEffect(() => {
-        if (user?.activities[user?.activities.length - 1].finished) {
-            clearInterval(intervalState!);
-            setIntervalState(undefined);
-            setTime("00:00:00");
-        } else {
-            if (user?.activities[user?.activities.length - 1].start) {
+        const currentTask = user?.activities[user?.activities.length - 1];
+        if (currentTask) {
+            const lastPause = currentTask.pauses[currentTask?.pauses.length - 1];
+            if (currentTask.finished) {
+                setCurrentTask(undefined);
+                clearInterval(intervalState!);
+                setIntervalState(undefined);
+                setTime("00:00:00");
+            } else if (lastPause?.finished) {
+                clearInterval(intervalState!);
+                setCurrentTask({
+                    isPause: false,
+                    name: lastPause.task,
+                });
                 setIntervalState(
-                    setInterval(() => {
-                        const currentDate = new Date().getTime();
-                        const startDate = new Date(user?.activities[user?.activities.length - 1].start).getTime();
-                        setTime(formatTime(currentDate - startDate));
-                    }, 1000)
+                    setInterval(
+                        () => setTime(formatTime(new Date().getTime() - new Date(lastPause.start).getTime())),
+                        1000
+                    )
+                );
+            } else if (!lastPause?.finished && lastPause?.start) {
+                clearInterval(intervalState!);
+                setCurrentTask({
+                    isPause: true,
+                    name: lastPause?.task,
+                });
+                setIntervalState(setInterval(() => {}, 1000));
+            } else if (!currentTask?.finished && currentTask?.start) {
+                setIntervalState(
+                    setInterval(
+                        () => setTime(formatTime(new Date().getTime() - new Date(currentTask.start).getTime())),
+                        1000
+                    )
                 );
             }
         }
-    }, [user?.activities[user?.activities.length - 1].finished]);
+    }, [user?.activities[user?.activities.length - 1]]);
 
     return (
         <Container>
             <ModalTitle>Zeit tracken</ModalTitle>
             <Row>
                 <Col>
-                    <h1>{time}</h1>
+                    <Row>
+                        <h1>{time}</h1>
+                    </Row>
+                    {currentTask && (
+                        <Row>
+                            <p>Aktueller Task: {currentTask.name || "Pause"}</p>
+                        </Row>
+                    )}
                 </Col>
             </Row>
             <Row>
@@ -49,7 +81,11 @@ const TimeTracker = () => {
                     <Button variant={"success"}>Starten</Button>
                 </Col>
                 <Col>
-                    <Button variant={"secondary"}>Pause</Button>
+                    {!currentTask?.isPause ? (
+                        <Button variant={"secondary"}>Pause</Button>
+                    ) : (
+                        <Button variant={"secondary"}>Pause beenden</Button>
+                    )}
                 </Col>
                 <Col>
                     <Button variant={"danger"}>Stopp</Button>
@@ -73,6 +109,10 @@ const MINUTES_IN_MS = 60 * SECONDS_IN_MS;
 const HOURS_IN_MS = 60 * MINUTES_IN_MS;
 
 const formatTime = (time: number) =>
-    `${Math.floor(time / HOURS_IN_MS)}:${Math.floor(time / MINUTES_IN_MS)}:${Math.floor(time / SECONDS_IN_MS)}`;
+    `${formatString(Math.floor(time / HOURS_IN_MS))}:${formatString(Math.floor(time / MINUTES_IN_MS))}:${formatString(
+        Math.floor(time / SECONDS_IN_MS)
+    )}`;
+
+const formatString = (time: number) => `0${time}`.slice(-2);
 
 export default TimeTracker;
