@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "/time-tracker/static/js/main.f6ba71e2.chunk.js",
-    "main.js.map": "/time-tracker/static/js/main.f6ba71e2.chunk.js.map",
+    "main.js": "/time-tracker/static/js/main.4a45400c.chunk.js",
+    "main.js.map": "/time-tracker/static/js/main.4a45400c.chunk.js.map",
     "runtime-main.js": "/time-tracker/static/js/runtime-main.180d90a1.js",
     "runtime-main.js.map": "/time-tracker/static/js/runtime-main.180d90a1.js.map",
     "static/css/2.983f79de.chunk.css": "/time-tracker/static/css/2.983f79de.chunk.css",
-    "static/js/2.4af65cf8.chunk.js": "/time-tracker/static/js/2.4af65cf8.chunk.js",
-    "static/js/2.4af65cf8.chunk.js.map": "/time-tracker/static/js/2.4af65cf8.chunk.js.map",
+    "static/js/2.68a3d957.chunk.js": "/time-tracker/static/js/2.68a3d957.chunk.js",
+    "static/js/2.68a3d957.chunk.js.map": "/time-tracker/static/js/2.68a3d957.chunk.js.map",
     "index.html": "/time-tracker/index.html",
     "static/css/2.983f79de.chunk.css.map": "/time-tracker/static/css/2.983f79de.chunk.css.map",
-    "static/js/2.4af65cf8.chunk.js.LICENSE.txt": "/time-tracker/static/js/2.4af65cf8.chunk.js.LICENSE.txt"
+    "static/js/2.68a3d957.chunk.js.LICENSE.txt": "/time-tracker/static/js/2.68a3d957.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.180d90a1.js",
     "static/css/2.983f79de.chunk.css",
-    "static/js/2.4af65cf8.chunk.js",
-    "static/js/main.f6ba71e2.chunk.js"
+    "static/js/2.68a3d957.chunk.js",
+    "static/js/main.4a45400c.chunk.js"
   ]
 }
