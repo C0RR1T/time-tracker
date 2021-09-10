@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Nav, Navbar } from 'react-bootstrap';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import { Link, useHistory } from 'react-router-dom';
 
 const AppNavbar = () => {

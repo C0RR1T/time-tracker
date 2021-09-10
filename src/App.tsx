@@ -4,7 +4,7 @@ import AppNavbar from './AppNavbar';
 import { HashRouter, Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
 import Login from './login/Login';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import SignUp from './login/SignUp';
 import TimeTracker from './mainsite/TimeTracker';
 import ManageTasks from './mainsite/ManageTasks';

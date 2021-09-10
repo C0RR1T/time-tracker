@@ -8,6 +8,10 @@
 # testing
 /coverage
 
+*.report.html
+
+*.d.ts
+
 # production
 /build
 

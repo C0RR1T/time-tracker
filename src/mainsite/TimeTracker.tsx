@@ -8,7 +8,7 @@ import {
     Row,
 } from 'react-bootstrap';
 import User, { Activity } from '../User';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import SelectTaskPopUp from './SelectTaskPopUp';
 
 const TimeTracker = () => {
@@ -34,6 +34,9 @@ const TimeTracker = () => {
     useEffect(() => {
         const currentTask = user?.activities[user?.activities.length - 1];
         if (currentTask) {
+            const timeWasted = currentTask.pauses
+                .filter(a => a.finished)
+                .reduce((a, b) => a + (b.finished! - b.start), 0);
             const lastPause = getLastPause(user);
             if (!!currentTask.finished && !!currentTask.start) {
                 setTime('00:00:00');
@@ -50,7 +53,11 @@ const TimeTracker = () => {
                 setIntervalState(
                     setInterval(
                         () =>
-                            setTime(formatTime(Date.now() - currentTask.start)),
+                            setTime(
+                                formatTime(
+                                    Date.now() - currentTask.start - timeWasted
+                                )
+                            ),
                         1000
                     )
                 );
@@ -73,7 +80,11 @@ const TimeTracker = () => {
                 setIntervalState(
                     setInterval(
                         () =>
-                            setTime(formatTime(Date.now() - currentTask.start)),
+                            setTime(
+                                formatTime(
+                                    Date.now() - currentTask.start - timeWasted
+                                )
+                            ),
                         1000
                     )
                 );
@@ -179,6 +190,7 @@ const TimeTracker = () => {
         <Container>
             <SelectTaskPopUp
                 allowUndefined={!!currentTask}
+                currentTask={currentTask}
                 onSelect={currentTask ? startPause : startTask}
                 onClose={() => setShowPopUp(false)}
                 show={showPopUp}
@@ -228,6 +240,10 @@ const TimeTracker = () => {
                 <ListGroup>
                     {user?.fastTasks.map(val => (
                         <ListGroup.Item
+                            disabled={
+                                currentTask?.name === val ||
+                                currentTask?.isPause
+                            }
                             action
                             onClick={() =>
                                 currentTask ? startPause(val) : startTask(val)

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import User from '../User';
 import { Button, Col, Container, Row, Table } from 'react-bootstrap';
 
@@ -106,12 +106,14 @@ const Statistics = () => {
                         <th>Verbrauchte Zeit</th>
                     </thead>
                     <tbody>
-                        {activities.map(val => (
-                            <tr>
-                                <td>{val.name}</td>
-                                <td>{formatTime(val.time)}</td>
-                            </tr>
-                        ))}
+                        {activities
+                            .sort((a, b): number => b.time - a.time)
+                            .map(val => (
+                                <tr>
+                                    <td>{val.name}</td>
+                                    <td>{formatTime(val.time)}</td>
+                                </tr>
+                            ))}
                     </tbody>
                 </Table>
             </Row>

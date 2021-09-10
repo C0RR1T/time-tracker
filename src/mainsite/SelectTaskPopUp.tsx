@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import User from '../User';
 
 type Props = {
     onSelect: (task?: string) => void;
     onClose: () => void;
     show: boolean;
+    currentTask?: {
+        name?: string;
+        isPause: boolean;
+    };
     allowUndefined: boolean;
 };
 
@@ -15,6 +19,7 @@ const SelectTaskPopUp = ({
     onClose,
     show,
     allowUndefined = false,
+    currentTask,
 }: Props) => {
     const [user, setUser] = useState<User>();
     const [selectedTask, setSelectedTask] = useState<string>();
@@ -47,7 +52,10 @@ const SelectTaskPopUp = ({
                     <Dropdown.Toggle>Aktivität aussuchen</Dropdown.Toggle>
                     <Dropdown.Menu>
                         {user?.tasks.map(val => (
-                            <Dropdown.Item key={val} eventKey={val}>
+                            <Dropdown.Item
+                                key={val}
+                                eventKey={val}
+                                disabled={val === currentTask?.name}>
                                 {val}
                             </Dropdown.Item>
                         ))}

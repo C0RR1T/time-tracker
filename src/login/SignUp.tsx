@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import { useHistory } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({

@@ -9,7 +9,7 @@ import {
     ModalTitle,
     Table,
 } from 'react-bootstrap';
-import firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -87,7 +87,7 @@ const ManageTasks = () => {
                             }>
                             <Form.Check
                                 type={'checkbox'}
-                                defaultChecked={fastTasks.indexOf(val) !== -1}
+                                checked={fastTasks.includes(val)}
                                 onChange={e =>
                                     changeFastTasks(val, e.target.checked)
                                 }
